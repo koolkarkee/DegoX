@@ -11,10 +11,10 @@ require('./database/db')
 const morgan = require('morgan')
 app.use(morgan('dev'))
 
-//user body parser
+// //user body parser
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : false }));
-app.use(bodyParser.json)
+app.use(bodyParser.json()) 
 
 //inbuilt middleware (for images, videos and other files)
 //app.use(express.static('files')) //serve locally within express
@@ -24,12 +24,14 @@ app.use(bodyParser.json)
 const authRoute = require('./controllers/auth.route')
 const userRoute = require('./controllers/user.route')
 
+console.log('test printing')
+
 app.use('/auth', authRoute)
 app.use('/user', userRoute)
 
 //configuration block
 app.use((request, response, next) => { 
-    next({
+    next({ 
         msg : "Not Found",
         status : 404
     })

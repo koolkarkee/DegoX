@@ -2,49 +2,62 @@ var express = require('express')
 var router = express.Router()
 
 const UserModel = require('./../models/user.model')
+const MapUserReq = require('./../mappers/mapuser')
     
-router.post('/login',  (req, res, next) => {
-    
+var passwordHash = require('password-hash')
+
+router.get('/', (req, res, next) => {
+    res.status(200).json({ msg : "Ok"})
 })
 
 router.get('/register', (req, res, next) => {
-    res.status(200).json({ msg : "OK"})
+    res.status(200).json({ msg : "OK register"})
 })
 
-//login module
-router.post('/register',  (req, res, next) => {
-    const data = req.body
-    console.log("request body", data)
+router.post('/register',  (req, res, next) => { 
+    console.log("request body", req.body)
 
     const user = new UserModel({})
+    MapUserReq(user, req.body)
+    user.password =  passwordHash.generate(user.password)
 
-    user.name = data.name
-    user.username = data.username
-    user.password = data.password
-    user.email = data.email
-    user.phone = data.phone
-    user.address = {
-        temporary_address : data.temporary_address,
-        permanent_address : data.permanent_address
-    }
-    user.dob = data.dob
-    user.avatar = data.avatar
-    user.gender = data.gender
-    user.role = data.role
-    user.status = data.status
-
-    console.log('user >> ', user)
+    console.log("to be inserted ", user)
 
     user
         .save()
         .then(success => {
+            console.log('user registered sucessfully')
             res.status(200).json(success)
         })
         .catch(err => {
+            console.log('err : register >> ', err)
             next(err)
         })
         .finally()
 })
      
+
+router.post('/login',  (req, res, next) => {
+    UserModel.findOne({
+        username : req.body.username
+    }, (err, user) => {
+        if(err){
+            next(err)
+        }
+        if(user == null){
+            return next({
+                msg : "Invalid user/password"
+            })
+        }
+        var isMatch = passwordHash.verify(req.body.password, user.password)
+        if(!isMatch){
+            return next({
+                msg : "Invalid user/password"
+            })
+        }
+        res.status(200).json(user)
+    })
+})
+
 
 module.exports = router
