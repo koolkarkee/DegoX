@@ -5,6 +5,13 @@ const UserModel = require('./../models/user.model')
 const MapUserReq = require('./../mappers/mapuser')
     
 var passwordHash = require('password-hash')
+const JWT = require('jsonwebtoken')
+
+const config = require('./../configs')
+function createToken(data){
+    var token = JWT.sign(data, config.JWT_secret)
+    return token
+}
 
 router.get('/', (req, res, next) => {
     res.status(200).json({ msg : "Ok"})
@@ -54,8 +61,17 @@ router.post('/login',  (req, res, next) => {
             return next({
                 msg : "Invalid user/password"
             })
+        } else { //password is matched
+            var token = createToken({
+                name : user.username,
+                _id : user.id,
+                role : user.role
+            })
+             res.status(200).json({
+                user,
+                token
+             })
         }
-        res.status(200).json(user)
     })
 })
 

@@ -4,7 +4,8 @@ const MapUserReq = require('./../mappers/mapuser')
 
 router.route('/')
 .get((req, res, next) => {
-    console.log('get all users >> ')
+    console.log('req.loggedInUser from user route >> ', req.loggedInUser)
+    //console.log('get all users >> ')
     //get all users 
     UserModel
         .find({}) //second parameter is project to specifically select a property

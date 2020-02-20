@@ -7,6 +7,9 @@ var app = express()
 //database
 require('./database/db')
 
+//load middleware
+const authenticate = require('./middlewares/authenticate')
+
 //third party middleware
 const morgan = require('morgan')
 app.use(morgan('dev'))
@@ -27,7 +30,7 @@ const userRoute = require('./controllers/user.route')
 console.log('test printing')
 
 app.use('/auth', authRoute)
-app.use('/user', userRoute)
+app.use('/user', authenticate, userRoute)
 
 //configuration block
 app.use((request, response, next) => { 
