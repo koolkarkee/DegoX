@@ -5,10 +5,7 @@ var app = express()
 //this app is entire express framework
 
 //database
-require('./database/db')
-
-//load middleware
-const authenticate = require('./middlewares/authenticate')
+require('./database/db') 
 
 //third party middleware
 const morgan = require('morgan')
@@ -17,20 +14,15 @@ app.use(morgan('dev'))
 // //user body parser
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : false }));
-app.use(bodyParser.json()) 
+app.use(bodyParser.json())  
 
 //inbuilt middleware (for images, videos and other files)
 //app.use(express.static('files')) //serve locally within express
 //app.use('files', express.static('files')) //serve for external request
 
-//load routing level middleware
-const authRoute = require('./controllers/auth.route')
-const userRoute = require('./controllers/user.route')
-
-console.log('test printing')
-
-app.use('/auth', authRoute)
-app.use('/user', authenticate, userRoute)
+//load routing level middleware 
+const apiRoute = require('./routes/api.routes') 
+app.use('./api', apiRoute) 
 
 //configuration block
 app.use((request, response, next) => { 
@@ -52,7 +44,7 @@ app.use((err, req, res, next)=>{
 
 app.listen(port, (err, success) => {
     if(err) {
-        console.log('server listening failed')
+        console.log('server listening failed') 
     } else {
         console.log('success listening at port >> ' + port, success)
     }

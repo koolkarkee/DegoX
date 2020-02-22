@@ -1,6 +1,8 @@
 const JWT = require('jsonwebtoken')
 const config = require('./../configs')
 
+const UserModel = require('./../modules/user/user.model')      
+
 module.exports = function(req, res, next){
     let token;
     if(req.headers['x-access-token']){
@@ -28,10 +30,24 @@ module.exports = function(req, res, next){
         if(err){
             return next(err)
         }
-       
+
         console.log('decoded value >> ', decoded)
-        req.loggedInUser = decoded
-        //by pass the middleware
-        next()
+        //else
+        UserModel.findById(decoded._id)
+            .exec((err, user) => {
+                if(err) return next(err)
+                if(!user) {
+                    next({
+                        msg : "User not found or does not exist in the system",
+                        status : 400
+                    })
+                }
+                if(user) {
+                    req.loggedInUser = decoded
+                    //by pass the middleware
+                    next()
+                }
+            }) 
+    
     })
 }
