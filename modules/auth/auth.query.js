@@ -9,10 +9,8 @@ function login(data){
     return UserQuery.login(data) 
 }
 
-function find(){
-    return new Promise((resolve, reject) => {
-        resolve({ msg : "not implemented", status : 200 })
-    })
+function find(condition){ 
+    return UserQuery.find(condition)
 }
 
 module.exports = {

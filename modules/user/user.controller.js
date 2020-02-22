@@ -39,9 +39,9 @@ function findById(req, res, next){
 }
 
 function update(req, res, next){
-    var condition = { _id : req.params.id }
+    console.log('request body in update >> ', req.body)
     UserQuery
-        .update(condition)
+        .update(req.params.id, req.body)
         .then(data => {
             res.json(data)
         }) 
@@ -52,9 +52,8 @@ function update(req, res, next){
 }
 
 function remove(req, res, next){ 
-    var condition = { _id : req.params.id }
     UserQuery
-        .remove(condition)
+        .remove(req.params.id)
         .then(data => {
             res.json(data)
         }) 
@@ -65,10 +64,16 @@ function remove(req, res, next){
 }
 
 function search(req, res, next){
-    next({
-        msg : "not implemented",
-        status : 400
-    })
+    var condition = {  } //search params here
+    UserQuery
+        .find(condition)
+        .then(data => {
+            res.json(data)
+        }) 
+        .catch(err => {
+            console.log('error while finding user >> ', err)
+            return next(err)
+        }) 
 }
  
 module.exports = {

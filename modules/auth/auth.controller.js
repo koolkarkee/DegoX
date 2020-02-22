@@ -4,9 +4,11 @@ const createToken = require('./auth.hasher')
 
 //find a user
 function find(req, res, next){
+    var condition = {}
+    
     console.log('from auth controller >> ')
     AuthQuery
-        .find() 
+        .find(condition) 
         .then(data => {
             console.log('success from auth find >> ', data)
             res.status(200).json(data)

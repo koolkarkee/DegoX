@@ -13,16 +13,48 @@ function insert(data){
 }
 
 function find(condition){
-    return UserModel.find(condition).exec()
+    return UserModel.find(condition).sort({_id : -1}).exec()
 }
 
-function update(id, data, condition){
-    return mapUser(data).update(condition, { upsert : true }, {}) 
+function update(id, data){
+    var condition = { _id : id }
+    
+    return new Promise((resolve, reject) => {
+        UserModel.findOne(condition, (err, user) => {
+            if(err) 
+                reject(err)
+            if(user == null)
+                reject({ msg : "Invalid User" })
+            else { 
+                UserMapper(user, data) //update given values 
+                user.save((err, result) => {
+                    if(err)
+                        reject(err)
+                    
+                    resolve(result)
+                }) 
+            }
+        })
+    })
 }   
 
-function remove(){
-    //return UserModel.findByIdAndRemove(id).exec() 
-    return new Promise((resolve, reject) => { resolve({ msg : "not implemented", status : 404 }) })
+function remove(id){ 
+    var condition = { _id : id }
+    return new Promise((resolve, reject) => {
+        UserModel.findOne(condition).exec((err, user) => { 
+            if(err) 
+                reject(err)
+            if(user == null)
+                reject({ msg : "User does not exist already" })
+            else { 
+                user.remove((err, removed) => {
+                    if(err)
+                        reject(err)
+                    resolve(removed)
+                })
+            }
+        })
+    })
 }
 
 function login(data){ 
@@ -48,6 +80,10 @@ function login(data){
             } 
         })
     }) 
+}
+
+function search(condition){
+    return UserModel.find(condition).exec() 
 }
 
 module.exports = { 

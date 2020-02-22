@@ -1,12 +1,12 @@
 var express = require('express')
-const port = 8090
+const port = require('./configs').port
 
 var app = express()
 //this app is entire express framework
 
 //database
 require('./database/db') 
-
+ 
 //third party middleware
 const morgan = require('morgan')
 app.use(morgan('dev'))
