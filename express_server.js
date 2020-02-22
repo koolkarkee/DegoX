@@ -22,7 +22,7 @@ app.use(bodyParser.json())
 
 //load routing level middleware 
 const apiRoute = require('./routes/api.routes') 
-app.use('./api', apiRoute) 
+app.use('/api', apiRoute) 
 
 //configuration block
 app.use((request, response, next) => { 
@@ -34,7 +34,7 @@ app.use((request, response, next) => {
 
 //error handling middleware
 app.use((err, req, res, next)=>{
-    console.log('I am error handling middleware')
+    console.log('From Error Handling Middleware')
     res.json({
         msg : err.msg || err,
         status : err.status || 400

@@ -27,5 +27,5 @@ module.exports = function(obj, fromBody){
     if(fromBody.status)
        obj.status = fromBody.status 
 
-   return 
+   return obj
 }
