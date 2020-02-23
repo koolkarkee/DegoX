@@ -10,11 +10,14 @@ require('./database/db')
 //third party middleware
 const morgan = require('morgan')
 app.use(morgan('dev'))
-
+ 
 // //user body parser
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(bodyParser.json())  
+
+// const m = require('./helpers/mailer.helper')
+// m.sendMail(null, 'koolkarkee@gmail.com', 'test mail', '<h1>test mail</h1>') 
 
 //inbuilt middleware (for images, videos and other files)
 //app.use(express.static('files')) //serve locally within express

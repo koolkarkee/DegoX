@@ -1,6 +1,6 @@
 const AuthQuery = require('./auth.query')
 const passwordHash = require('password-hash')
-const createToken = require('./auth.hasher')  
+const createToken = require('./auth.hasher')   
 
 //find a user
 function find(req, res, next){
