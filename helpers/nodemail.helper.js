@@ -13,13 +13,13 @@ module.exports = function sendMail(from, to, subject, text, html){
         
         var mailer = nodemailer.createTransport(mailConfig.smtpConfig);
         
-        console.log('host >> ', mailer.host)
+        console.log('email host >> ', mailConfig.smtpConfig.host)
         mailer.sendMail(mailOptions, (error, response)=>{ 
             if(error){
                 reject(error);
             }
             else{
-                resolve(resolve);
+                resolve(response);
             }   
          });
     })

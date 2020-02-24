@@ -26,6 +26,13 @@ module.exports = function(obj, fromBody){
        obj.role = fromBody.role
     if(fromBody.status)
        obj.status = fromBody.status 
+       
+    if(fromBody.emailToken)
+       obj.emailToken = fromBody.emailToken
+    if(fromBody.emailTokenExpiryDate)
+       obj.emailTokenExpiryDate = fromBody.emailTokenExpiryDate
+    if(fromBody.emailConfirmed)
+       obj.emailConfirmed = fromBody.emailConfirmed
 
    return obj
 }

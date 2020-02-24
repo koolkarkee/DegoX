@@ -1,13 +1,17 @@
 const nodemailer = require('./nodemail.helper')
 
 function sendMail(from, to, subject, text, html){
-    nodemailer(from, to, subject, text, html)
-        .then(result => {
-            console.log('mail sent', result)
-        })
-        .catch(err => {
-            console.log('mail not sent', err)
-        })
+    return new Promise((resolve, reject) => {
+        nodemailer(from, to, subject, text, html)
+            .then(result => {
+                //console.log('mail sent', result)
+                resolve(result)
+            })
+            .catch(err => {
+                //console.log('mail not sent', err)
+                reject(err)
+            })
+    }) 
 }
 
 module.exports = {

@@ -46,6 +46,16 @@ const UserSchema = new Schema({
         type : String,
         enum : ['active', 'inactive'],
         default : 'inactive'
+    },
+    emailToken : {
+        type : String
+    },
+    emailTokenExpiryDate : {
+        type : Date
+    },
+    emailConfirmed : {
+        type : Boolean,
+        default : false
     }
 }, 
 {

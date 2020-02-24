@@ -3,7 +3,7 @@ const UserQuery = require('./user.query')
 function insert(req, res, next){
     UserQuery
         .insert(req.body)
-        .then(data => {
+        .then(user => {            
             res.json(data)
         })
         .catch(err => {

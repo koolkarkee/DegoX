@@ -1,6 +1,7 @@
 const AuthQuery = require('./auth.query')
 const passwordHash = require('password-hash')
 const createToken = require('./auth.hasher')   
+const emailHelper = require('./../user/user.emailhelper')
 
 //find a user
 function find(req, res, next){
@@ -26,13 +27,17 @@ function insertUser(req, res, next){
 
     AuthQuery
         .insertUser(req.body) 
-        .then(data => {
-            console.log('registered successfully >> ', data)
-            res.status(200).json(data)
+        .then(user => {
+            console.log('registered successfully >> ', user) 
+
+            //send email verification link
+            emailHelper.sendRegistrationLink(user.email, user.username, user.emailToken)
+
+            res.status(200).json(user)
         })
         .catch(err => {
             console.log('error while registering user >> ', err)
-            return next(err)
+            return next(err) 
         })            
 }
 

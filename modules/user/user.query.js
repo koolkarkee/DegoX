@@ -1,6 +1,7 @@
 const UserModel = require('./user.model')
 const UserMapper = require('./user.mapper')
 const passwordHash = require('password-hash')
+const userEmailHelper = require('./user.emailhelper')
 
 function mapUser(data){ 
     var result = new UserModel({})
@@ -9,7 +10,21 @@ function mapUser(data){
 }
 
 function insert(data){   
-    return mapUser(data).save()
+    //email verification process
+     //step 1 - create and store random guid
+    var myUser = UserMapper(new UserModel({}), data)
+
+    //create uuid
+    myUser.emailToken = userEmailHelper.getEmailRegistrationToken()
+
+    //set token expirty date 
+    myUser.emailTokenExpiryDate = userEmailHelper.getEmailTokenExpiryDate()
+
+    console.log('user email token >> ', myUser.emailToken)
+    console.log('token expirty date >>', myUser.emailTokenExpiryDate)
+
+    //then save the user
+    return myUser.save()
 }
 
 function find(condition){
