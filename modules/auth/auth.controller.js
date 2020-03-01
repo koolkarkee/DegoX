@@ -144,9 +144,65 @@ function verifyUser(req, res, next){
         })      
 }
 
+//forgot-password implementation
+function forgotPassword(req, res, next){
+    //get email
+    var email = req.body.email
+
+    if(email == null || email == '')
+        return next({ msg : "invalid request", status : 404 }) 
+    
+    //get user by email
+    AuthQuery
+        .find({ email : email })
+        .then(user => {
+            user = user[0]
+            console.log('user >> ', user)
+
+            if(!user){
+                return next({
+                    msg : 'user does not exist',
+                    status : 404
+                })
+            }
+
+            //proceed to update emailToken and userConfirmed
+            user.emailToken = emailHelper.getEmailRegistrationToken()
+            user.emailTokenExpiryDate = emailHelper.getEmailTokenExpiryDate()
+            user.emailConfirmed = false
+
+            console.log('email token >> ', user.emailToken)
+            console.log('email token expiration >> ', user.emailTokenExpiryDate)
+            console.log('email confirmed >> ', user.emailConfirmed)
+
+            //update and send email confirmation
+            var id = user._id
+            console.log('user id >> ', id)
+
+            console.log('user before update >> ', user)
+            AuthQuery
+                .updateUser(id, user)
+                .then(updated => {
+                    console.log('updated user >> ', updated)
+                    console.log('email confirmed updated >> ', updated.emailConfirmed)
+
+                    //send email confirmation link
+                    emailHelper.sendRegistrationLink(updated.email, id, updated.emailToken)
+                    res.status(200).json(updated) 
+                })
+                .catch(err => {
+                    return next(err) 
+                })
+        }) 
+        .catch(err => {
+            return next(err) 
+        })
+}
+
 module.exports = {
     find,
     insertUser,
     login,
-    verifyUser
+    verifyUser,
+    forgotPassword
 }

@@ -18,6 +18,7 @@ function verifyUser(emailToken){
 }
 
 function updateUser(id, user){
+    console.log('user in user query >> ', user)
     return UserQuery.update(id, user)
 }
 

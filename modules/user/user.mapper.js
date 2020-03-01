@@ -31,8 +31,12 @@ module.exports = function(obj, fromBody){
        obj.emailToken = fromBody.emailToken
     if(fromBody.emailTokenExpiryDate)
        obj.emailTokenExpiryDate = fromBody.emailTokenExpiryDate
+    
+    console.log('log from mapper class for email confirmed >> ', fromBody.emailConfirmed)
     if(fromBody.emailConfirmed)
-       obj.emailConfirmed = fromBody.emailConfirmed
+       obj.emailConfirmed = fromBody.emailConfirmed 
+    if(!fromBody.emailConfirmed)
+       obj.emailConfirmed = false
 
    return obj
 }

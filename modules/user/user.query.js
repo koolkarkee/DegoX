@@ -33,6 +33,7 @@ function find(condition){
 
 function update(id, data){
     var condition = { _id : id }
+    console.log('updated user in query file >> ', data)
     
     return new Promise((resolve, reject) => {
         UserModel.findOne(condition, (err, user) => {

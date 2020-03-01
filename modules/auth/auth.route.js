@@ -18,4 +18,7 @@ router.route('/verify')
 router.route('/login')  
     .post(authController.login)
 
+router.route('/forgot-password')
+    .post(authController.forgotPassword)  
+
 module.exports = router

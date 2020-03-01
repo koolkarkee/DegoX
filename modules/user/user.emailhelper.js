@@ -1,7 +1,3 @@
- //email verification code here
-    //step 1 - create and store random guid
-    //step 2 - send the email with the guid 
-
 const uuidv1 = require('uuid/v1'); 
 const emailHelper = require('./../../helpers/mailer.helper')
 const config = require('./../../configs/index')
