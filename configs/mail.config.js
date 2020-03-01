@@ -1,10 +1,10 @@
 var smtpConfig = {
-    host : "mail.neptouch.com",
-    port : 25,
-    secure : false,  
+    host : "mail.zoho.com",
+    port : 587, 
+    secure : true,  
     auth : {
-        user : "bibek.karki@neptouch.com",
-        pass : "neptouch@123"
+        user : "noreply@dulwa.com", 
+        pass : "Nepalese123*#"  
     }
 }
 

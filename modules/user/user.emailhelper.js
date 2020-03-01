@@ -10,13 +10,16 @@ function getEmailRegistrationToken(){
     return  uuidv1()
 }
 
-function getRegistrationBodyHtml(emailToken){
-    let link = config.IP + 'api/auth/verify?emailToken=' + emailToken
+function getRegistrationBodyHtml(emailToken, id){
+    let link = config.IP + 'api/auth/verify?emailToken=' 
+                + emailToken + '&' + 'id=' + id 
+
     var body = `<p> 
     Please click the link to confirm your registration below : <br/>
     <a href=" ${link}">${link}</a>
     </p>`
 
+    console.log('email body >> ', body)
     return body
 }
 
@@ -29,9 +32,10 @@ function getEmailTokenExpiryDate(){
     return new Date().addHours() 
 }
 
-function sendRegistrationLink(email, user, emailToken){
+function sendRegistrationLink(email, id, emailToken){
     emailHelper
-        .sendMail(null, email, "Email Registration Confirmation", "Confirm your email", getRegistrationBodyHtml(emailToken))
+        .sendMail(null, email, "Email Registration Confirmation", 
+                "Confirm your email", getRegistrationBodyHtml(emailToken, id))
         .then(result => {
             console.log("Registration mail status : ", result)
         })

@@ -18,7 +18,7 @@ function insert(data){
     myUser.emailToken = userEmailHelper.getEmailRegistrationToken()
 
     //set token expirty date 
-    myUser.emailTokenExpiryDate = userEmailHelper.getEmailTokenExpiryDate()
+    myUser.emailTokenExpiryDate = userEmailHelper.getEmailTokenExpiryDate() 
 
     console.log('user email token >> ', myUser.emailToken)
     console.log('token expirty date >>', myUser.emailTokenExpiryDate)

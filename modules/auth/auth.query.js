@@ -13,8 +13,18 @@ function find(condition){
     return UserQuery.find(condition)
 }
 
+function verifyUser(emailToken){
+    return UserQuery.find({ emailToken : emailToken}) 
+}
+
+function updateUser(id, user){
+    return UserQuery.update(id, user)
+}
+
 module.exports = {
     insertUser,
     login,
-    find
+    find,
+    verifyUser,
+    updateUser
 }

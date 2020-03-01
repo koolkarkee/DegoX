@@ -12,6 +12,9 @@ router.route('/')
 router.route('/register') 
     .post(authController.insertUser) 
 
+router.route('/verify')
+    .get(authController.verifyUser)
+
 router.route('/login')  
     .post(authController.login)
 
