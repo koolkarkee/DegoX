@@ -40,9 +40,22 @@ function sendRegistrationLink(email, id, emailToken){
         })
 }
 
+function sendMailAfterPasswordReset(username, email){
+    var body = `<p>Dear ${username} , <br/> your password has been succesfully reset</p>`
+    emailHelper
+        .sendMail(null, email, 'password reset', 'password reset', body)
+        .then(result => {
+            console.log("Registration mail status : ", result)
+        })
+        .catch(err => {
+            console.log("Registration mail err : " , err)
+        })
+}
+
 module.exports = {
     getEmailRegistrationToken,
     getEmailTokenExpiryDate,
-    sendRegistrationLink
+    sendRegistrationLink,
+    sendMailAfterPasswordReset
 }
      

@@ -43,6 +43,7 @@ function update(id, data){
                 reject({ msg : "Invalid User" })
             else { 
                 UserMapper(user, data) //update given values 
+                console.log('updating values in user >> ', user)
                 user.save((err, result) => {
                     if(err)
                         reject(err)
