@@ -35,10 +35,12 @@ app.use((request, response, next) => {
 //error handling middleware
 app.use((err, req, res, next)=>{
     console.log('From Error Handling Middleware')
-    res.json({
-        msg : err.msg || err,
-        status : err.status || 400
-    })
+    res
+        .status(err. status || 400)
+        .json({
+            msg : err.msg || err,
+            status : err.status || 400
+        })
     console.log('err >> ', err)
 })
 
