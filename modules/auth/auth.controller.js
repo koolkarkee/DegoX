@@ -1,4 +1,4 @@
-const AuthQuery = require('./auth.query')
+const Query = require('./auth.query')
 const passwordHash = require('password-hash')
 const createToken = require('./auth.hasher')   
 const emailHelper = require('./../user/user.emailhelper')
@@ -8,7 +8,7 @@ function find(req, res, next){
     var condition = {}
     
     console.log('from auth controller >> ')
-    AuthQuery
+    Query
         .find(condition) 
         .then(data => {
             console.log('success from auth find >> ', data)
@@ -25,7 +25,7 @@ function insertUser(req, res, next){
     //hash the password first
     req.body.password = passwordHash.generate(req.body.password) 
 
-    AuthQuery
+    Query
         .insertUser(req.body) 
         .then(user => {
             console.log('registered successfully >> ', user) 
@@ -44,7 +44,7 @@ function insertUser(req, res, next){
 
 //for login 
 function login(req, res, next){ 
-    AuthQuery
+    Query
         .login(req.body)
         .then(user => {
             console.log('successfully logged in >> ', user)
@@ -87,7 +87,7 @@ function verifyUser(req, res, next){
     }
 
     //proceed towards verification
-    AuthQuery
+    Query
         .verifyUser(emailToken) 
         .then(user => { 
             user = user[0]            
@@ -128,7 +128,7 @@ function verifyUser(req, res, next){
             user.emailConfirmed = true  
             console.log('user.emailTokenExpiryDate >> ', user.emailTokenExpiryDate)
 
-            AuthQuery
+            Query
                 .updateUser(id, user)
                 .then(updated => {
                     console.log('verified successfully >> ', updated) 
@@ -153,7 +153,7 @@ function forgotPassword(req, res, next){
         return next({ msg : "invalid request", status : 404 }) 
     
     //get user by email
-    AuthQuery
+    Query
         .find({ email : email })
         .then(user => {
             user = user[0]
@@ -180,7 +180,7 @@ function forgotPassword(req, res, next){
             console.log('user id >> ', id)
 
             console.log('user before update >> ', user)
-            AuthQuery
+            Query
                 .updateUser(id, user)
                 .then(updated => {
                     console.log('updated user >> ', updated)
@@ -218,7 +218,7 @@ function resetPassword(req, res, next){
     }
 
     //proceed towards verification
-    AuthQuery
+    Query
         .verifyUser(emailToken) 
         .then(user => { 
             user = user[0]            
@@ -261,7 +261,7 @@ function resetPassword(req, res, next){
             console.log('hashed password >> ', user.password)
             console.log('user.emailTokenExpiryDate >> ', user.emailTokenExpiryDate)
 
-            AuthQuery
+            Query
                 .updateUser(id, user)
                 .then(updated => {
                     console.log('password changed successfully >> ', updated) 

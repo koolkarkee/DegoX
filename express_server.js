@@ -9,12 +9,7 @@ require('./database/db')
 
 //load third party middlewares
 const thirdParty = require('./middlewares/thirdparty')
-thirdParty.load(app)
-
-// const m = require('./helpers/mailer.helper')
-// m.sendMail(null, 'koolkarkee@gmail.com', 'test mail', '<h1>test mail</h1>') 
-//     .then(data => { console.log(data)})
-//     .catch(err => { console.log(err)}) 
+thirdParty.load(app) 
 
 //inbuilt middleware (for images, videos and other files)
 //app.use(express.static('files')) //serve locally within express

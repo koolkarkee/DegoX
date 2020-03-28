@@ -1,15 +1,15 @@
 const router = require('express').Router()
-const UserController = require('./user.controller')
+const Controller = require('./user.controller')
 
 const authenticate = require('./../../middlewares/authenticate')
 
 router.route('/search') 
-    .post(UserController.search)
+    .post(Controller.search)
 
 //put this part at last
 router.route('/:id')
-    .get(UserController.findById)
-    .put(UserController.update)
-    .delete(UserController.remove) 
+    .get(Controller.findById)
+    .put(Controller.update)
+    .delete(Controller.remove) 
     
 module.exports = router

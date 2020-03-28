@@ -1,25 +1,25 @@
-const UserQuery = require('./../user/user.query')
+const Query = require('./../user/user.query')
 
 function insertUser(data){
     console.log("request body", data) 
-    return UserQuery.insert(data)
+    return Query.insert(data)
 }
 
 function login(data){
-    return UserQuery.login(data) 
+    return Query.login(data) 
 }
 
 function find(condition){ 
-    return UserQuery.find(condition)
+    return Query.find(condition)
 }
 
 function verifyUser(emailToken){
-    return UserQuery.find({ emailToken : emailToken}) 
+    return Query.find({ emailToken : emailToken}) 
 }
 
 function updateUser(id, user){
     console.log('user in user query >> ', user)
-    return UserQuery.update(id, user)
+    return Query.update(id, user)
 }
 
 module.exports = {

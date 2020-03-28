@@ -3,7 +3,7 @@ const UserMapper = require('./user.mapper')
 const passwordHash = require('password-hash')
 const userEmailHelper = require('./user.emailhelper')
 
-function mapUser(data){ 
+function map(data){ 
     var result = new UserModel({})
     result = UserMapper(result, data)
     return result
@@ -75,7 +75,7 @@ function remove(id){
 }
 
 function login(data){ 
-    var model = mapUser(data) 
+    var model = map(data) 
     
     return new Promise((resolve, reject) => {
         var condition = { username : model.username } 

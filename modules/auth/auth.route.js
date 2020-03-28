@@ -4,24 +4,24 @@ var router = express.Router()
 const authenticate = require('./../../middlewares/authenticate') 
 const authorize = require('./../../middlewares/authorize') 
 
-var authController = require('./auth.controller')
+var Controller = require('./auth.controller')
 
 router.route('/')
-    .get(authenticate, authController.find) 
+    .get(authenticate, Controller.find) 
 
 router.route('/register') 
-    .post(authController.insertUser) 
+    .post(Controller.insertUser) 
 
 router.route('/verify')
-    .get(authController.verifyUser)
+    .get(Controller.verifyUser)
 
 router.route('/login')  
-    .post(authController.login)
+    .post(Controller.login)
 
 router.route('/forgot-password')
-    .post(authController.forgotPassword)  
+    .post(Controller.forgotPassword)  
 
 router.route('/reset-password')
-    .post(authController.resetPassword)
+    .post(Controller.resetPassword)
 
 module.exports = router
