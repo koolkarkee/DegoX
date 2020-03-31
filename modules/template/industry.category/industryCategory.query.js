@@ -1,5 +1,6 @@
 const Model = require('./industryCategory.model')
 const Mapper = require('./industryCategory.mapper')
+const Pagination = require('./../../../helpers/pagination.helper') 
 
 function map(data){
     var result = new Model({})
@@ -21,8 +22,15 @@ function insert(data) {
     }) 
 }
 
-function find(condition){
-    return Model.find(condition).sort({_id : -1}).exec()
+function find(condition, options = {}){ 
+    let pagination = Pagination(options) 
+ 
+    return Model
+        .find(condition)
+        .limit(pagination[0]) 
+        .skip(pagination[1])  
+        .sort({_id : -1}) 
+        .exec()
 }
 
 function update(id, data){
@@ -56,9 +64,9 @@ function remove(id){
     })
 }
 
-function search(condition){
+function search(condition, options = {}){
     console.log('search condition >> ', condition)
-    return Model.find(condition).sort({ _id : -1 }).exec() 
+    return find(condition, options) 
 }
 
 module.exports = {

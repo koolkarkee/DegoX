@@ -16,7 +16,7 @@ function insert(req, res, next){
 function find(req, res, next){
     var condition = {}
     Query
-        .find(condition)
+        .find(condition, req.query)
         .then(data => {
             res.status(200).json(data)
         }) 
@@ -77,7 +77,7 @@ function search(req, res, next){
     }  
 
     Query
-        .search(condition)
+        .search(condition, req.query)
         .then(data => {
             res.status(200).json(data)
         }) 
