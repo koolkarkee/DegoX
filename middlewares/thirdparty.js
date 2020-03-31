@@ -1,17 +1,17 @@
 //morgan
-const morgan = require('morgan')
+const Morgan = require('morgan')
 
 //use body parser
-var bodyParser = require('body-parser');
+const BodyParser = require('body-parser');
 
 //cors
-const cors = require('cors')
+const Cors = require('cors')
 
 function load(app){
-    app.use(morgan('dev'))
-    app.use(bodyParser.urlencoded({ extended : false }));
-    app.use(bodyParser.json())  
-    app.use(cors())
+    app.use(Morgan('dev'))
+    app.use(BodyParser.urlencoded({ extended : false }));
+    app.use(BodyParser.json())  
+    app.use(Cors())
 }
 
 module.exports = {

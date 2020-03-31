@@ -1,19 +1,17 @@
-const uuidv1 = require('uuid/v1'); 
-const emailHelper = require('./../../helpers/mailer.helper')
-const config = require('./../../configs/index')
+const Uuidv1 = require('uuid/v1'); 
+const EmailHelper = require('./../../helpers/mailer.helper')
+const EmailTemplate = require('./user.emailTemplate')
+const Config = require('./../../configs/index')
 
 function getEmailRegistrationToken(){
-    return  uuidv1()
+    return  Uuidv1()
 }
 
 function getRegistrationBodyHtml(emailToken, id){
-    let link = config.IP + 'api/auth/verify?emailToken=' 
+    let link = Config.IP + 'api/auth/verify?emailToken=' 
                 + emailToken + '&' + 'id=' + id 
 
-    var body = `<p> 
-    Please click the link to confirm your registration below : <br/>
-    <a href=" ${link}">${link}</a>
-    </p>`
+    var body = EmailTemplate.getHtmlTemplateForRegistration(link)
 
     console.log('email body >> ', body)
     return body
@@ -22,14 +20,14 @@ function getRegistrationBodyHtml(emailToken, id){
 //set the token expiration
 function getEmailTokenExpiryDate(){
     Date.prototype.addHours= function(){
-        this.setHours(this.getHours()+ config.userEmailConfirmationTokenExpiryHours);
+        this.setHours(this.getHours()+ Config.userEmailConfirmationTokenExpiryHours);
         return this;
     }
     return new Date().addHours() 
 }
 
 function sendRegistrationLink(email, id, emailToken){
-    emailHelper
+    EmailHelper
         .sendMail(null, email, "Email Registration Confirmation", 
                 "Confirm your email", getRegistrationBodyHtml(emailToken, id))
         .then(result => {
@@ -41,8 +39,8 @@ function sendRegistrationLink(email, id, emailToken){
 }
 
 function sendMailAfterPasswordReset(username, email){
-    var body = `<p>Dear ${username} , <br/> your password has been succesfully reset</p>`
-    emailHelper
+    var body = EmailTemplate.getHtmlTemplateForSuccessfulPasswordReset(username)
+    EmailHelper
         .sendMail(null, email, 'password reset', 'password reset', body)
         .then(result => {
             console.log("Registration mail status : ", result)

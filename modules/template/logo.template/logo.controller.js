@@ -1,18 +1,20 @@
-const Query = require('./user.query')
+const Query = require('./logo.query')
 
 function insert(req, res, next){
+    //TODO: file upload
+    console.log('request body >> ', req.body)
     Query
         .insert(req.body)
         .then(data => {            
             res.status(200).json(data)
-        }) 
+        })
         .catch(err => {
-            console.log('error while inserting user >> ', err)
+            console.log('error while inserting data >> ', err)
             return next(err)
         }) 
 }
 
-function find(req, res, next){
+function getAll(req, res, next){
     var condition = {}
     Query
         .find(condition)
@@ -20,7 +22,7 @@ function find(req, res, next){
             res.status(200).json(data)
         }) 
         .catch(err => {
-            console.log('error while finding user >> ', err)
+            console.log('error while finding data >> ', err)
             return next(err)
         }) 
 }
@@ -40,13 +42,15 @@ function findById(req, res, next){
 
 function update(req, res, next){
     console.log('request body in update >> ', req.body)
+    console.log('request params id >> ', req.params.id)
+    
     Query
         .update(req.params.id, req.body)
         .then(data => {
             res.status(200).json(data)
         }) 
         .catch(err => {
-            console.log('error while updating user >> ', err)
+            console.log('error while updating >> ', err)
             return next(err)
         }) 
 }
@@ -58,27 +62,53 @@ function remove(req, res, next){
             res.status(200).json(data)
         }) 
         .catch(err => {
-            console.log('error while removing user >> ', err)
+            console.log('error while removing >> ', err)
             return next(err)
         }) 
 }
 
 function search(req, res, next){
-    var condition = {  } //search params here
+    console.log('search query >> ', req.body)   
+    console.log('industry category >> ', req.body.industryCategory)
+
+    let conditionIndustryCategory =  {
+        industryCategory : {
+            $in : req.body.industryCategory
+        } 
+    }
+
+    let conditionTheme =  {
+        theme : {
+            $regex : req.body.theme,
+            $options : "i"
+        }
+    }
+
+    let conditionName = {
+        name : {
+            $regex : req.body.name,
+            $options : "i"
+        }
+    }
+     
+    var condition = { 
+        $and : [conditionIndustryCategory, conditionTheme, conditionName] 
+    }  
+
     Query
-        .find(condition)
+        .search(condition)
         .then(data => {
             res.status(200).json(data)
         }) 
         .catch(err => {
-            console.log('error while finding user >> ', err)
+            console.log('error while searching >> ', err)
             return next(err)
         }) 
 }
- 
+
 module.exports = {
     insert,
-    find,
+    find: getAll,
     findById,
     update,
     remove,

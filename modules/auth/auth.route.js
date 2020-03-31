@@ -1,27 +1,26 @@
 var express = require('express')
-var router = express.Router() 
+const Router = express.Router() 
+const Authenticate = require('./../../middlewares/authenticate') 
+const Authorize = require('./../../middlewares/authorize') 
 
-const authenticate = require('./../../middlewares/authenticate') 
-const authorize = require('./../../middlewares/authorize') 
+const Controller = require('./auth.controller')
 
-var Controller = require('./auth.controller')
+Router.route('/')
+    .get(Authenticate, Controller.find) 
 
-router.route('/')
-    .get(authenticate, Controller.find) 
-
-router.route('/register') 
+Router.route('/register') 
     .post(Controller.insertUser) 
 
-router.route('/verify')
+Router.route('/verify')
     .get(Controller.verifyUser)
 
-router.route('/login')  
+Router.route('/login')  
     .post(Controller.login)
 
-router.route('/forgot-password')
+Router.route('/forgot-password')
     .post(Controller.forgotPassword)  
 
-router.route('/reset-password')
+Router.route('/reset-password')
     .post(Controller.resetPassword)
 
-module.exports = router
+module.exports = Router

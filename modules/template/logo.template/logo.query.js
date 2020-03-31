@@ -1,7 +1,7 @@
-const Model = require('./industryCategory.model')
-const Mapper = require('./industryCategory.mapper')
+const Model = require('./logo.model')
+const Mapper = require('./logo.mapper')
 
-function map(data){
+function map(data) {
     var result = new Model({})
     result = Mapper(result, data)
     return result
@@ -21,11 +21,11 @@ function insert(data) {
     }) 
 }
 
-function find(condition){
+function find(condition) {
     return Model.find(condition).sort({_id : -1}).exec()
 }
 
-function update(id, data){
+function update(id, data) {
     var condition = { _id : id } 
     
     return new Promise((resolve, reject) => {
@@ -33,7 +33,7 @@ function update(id, data){
             if(err) 
                 reject(err)
             if(result == null)
-                reject({ msg : "Invalid data for Industry Category" }) 
+                reject({ msg : "Invalid data for Logo" }) 
             else {  
                 resolve(result)
             }
@@ -41,14 +41,14 @@ function update(id, data){
     })
 }
 
-function remove(id){
+function remove(id) {
     var condition = { _id : id } 
     return new Promise((resolve, reject) => {
         Model.findByIdAndDelete(condition, (err, result) => {
             if(err) 
                 reject(err)
             if(result == null)
-                reject({ msg : "Invalid data for Industry Category" })
+                reject({ msg : "Invalid data for Logo" })
             else { 
                 resolve({ msg : 'successfully removed'})
             }
@@ -56,9 +56,9 @@ function remove(id){
     })
 }
 
-function search(condition){
+function search(condition) {
     console.log('search condition >> ', condition)
-    return Model.find(condition).sort({ _id : -1 }).exec() 
+    return find(condition) 
 }
 
 module.exports = {

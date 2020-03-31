@@ -1,8 +1,8 @@
-const nodemailer = require('./nodemail.helper')
+const NodemailHelper = require('./nodemail.helper')
 
 function sendMail(from, to, subject, text, html){
     return new Promise((resolve, reject) => {
-        nodemailer(from, to, subject, text, html)
+        NodemailHelper(from, to, subject, text, html)
             .then(result => {
                 //console.log('mail sent', result)
                 resolve(result)

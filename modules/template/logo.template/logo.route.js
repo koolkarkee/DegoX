@@ -1,5 +1,5 @@
 const Router = require('express').Router()
-const Controller = require('./industryCategory.controller')
+const Controller = require('./logo.controller')
 
 Router.route('/insert')
     .post(Controller.insert)

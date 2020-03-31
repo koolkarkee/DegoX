@@ -5,22 +5,22 @@ const LogoTemplateSchema = new Schema({
     //db modeling
     name : { 
         type : String,
-        requied : true,
+        required : true,
+        unique : true,
         trim : true 
     },  
     svgFile : {
         type : String,
-        required : true 
+        required : true,
+        unique : true
     }, 
     theme : {
-        type : String, 
-        required : true,
+        type : String,   
         trim : true 
     },
-    industryCategory : [{
-        type : Schema.Types.ObjectId,
-        ref : 'industryCategory'
-    }],
+    industryCategory : { 
+        type: Array
+    },
     designer : {
         type : Schema.Types.ObjectId,
         ref : 'user'
@@ -37,15 +37,11 @@ const LogoTemplateSchema = new Schema({
     companySlogan : {
         type : String,
         default : 'Slogan'
-    },
-    ratings : [{ 
-        type : Schema.Types.ObjectId,
-        ref : 'ratings' 
-    }]
+    } 
 }, 
 {
     timestamps : true
 })
 
-const LogoTemplateModel = mongoose.model('template', LogoTemplateSchema)
+const LogoTemplateModel = mongoose.model('logoTemplate', LogoTemplateSchema)
 module.exports = mongoose.models.TemplateModel || LogoTemplateModel

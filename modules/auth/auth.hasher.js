@@ -1,8 +1,21 @@
-var passwordHash = require('password-hash')
+const PasswordHash = require('password-hash')
 const JWT = require('jsonwebtoken')
-const config = require('../../configs')
+const Config = require('../../configs')
 
-module.exports = function createToken(data){ //generating jwt token
-    return JWT.sign(data, config.JWT_secret) 
+function createToken(data){ //generating jwt token
+    return JWT.sign(data, Config.JWT_secret) 
 }
-  
+
+function generateHash(password){
+    return PasswordHash.generate(password)
+}
+
+function verifyPassword(password, hashedPassword) {
+    return PasswordHash.verify(password, hashedPassword)
+}  
+
+module.exports = {
+    createToken,
+    generateHash,
+    verifyPassword
+}

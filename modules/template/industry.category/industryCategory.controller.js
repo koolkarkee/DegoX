@@ -5,7 +5,7 @@ function insert(req, res, next){
     Query
         .insert(req.body)
         .then(data => {            
-            res.json(data)
+            res.status(200).json(data)
         })
         .catch(err => {
             console.log('error while inserting data >> ', err)
@@ -18,7 +18,7 @@ function find(req, res, next){
     Query
         .find(condition)
         .then(data => {
-            res.json(data)
+            res.status(200).json(data)
         }) 
         .catch(err => {
             console.log('error while finding data >> ', err)
@@ -31,7 +31,7 @@ function findById(req, res, next){
     Query
         .find(condition)
         .then(data => {
-            res.json(data)
+            res.status(200).json(data)
         }) 
         .catch(err => {
             console.log('error while finding user >> ', err)
@@ -46,7 +46,7 @@ function update(req, res, next){
     Query
         .update(req.params.id, req.body)
         .then(data => {
-            res.json(data)
+            res.status(200).json(data)
         }) 
         .catch(err => {
             console.log('error while updating >> ', err)
@@ -58,7 +58,7 @@ function remove(req, res, next){
     Query
         .remove(req.params.id)
         .then(data => {
-            res.json(data)
+            res.status(200).json(data)
         }) 
         .catch(err => {
             console.log('error while removing >> ', err)
@@ -79,7 +79,7 @@ function search(req, res, next){
     Query
         .search(condition)
         .then(data => {
-            res.json(data)
+            res.status(200).json(data)
         }) 
         .catch(err => {
             console.log('error while searching >> ', err)

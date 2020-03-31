@@ -1,5 +1,5 @@
 const JWT = require('jsonwebtoken')
-const config = require('./../configs')
+const Config = require('./../configs')
 
 const UserModel = require('./../modules/user/user.model')      
 
@@ -26,7 +26,7 @@ module.exports = function(req, res, next){
     }
 
     //verify the token
-    JWT.verify(token, config.JWT_secret, (err, decoded) => {
+    JWT.verify(token, Config.JWT_secret, (err, decoded) => {
         if(err){
             return next(err)
         }

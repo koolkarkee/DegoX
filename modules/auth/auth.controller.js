@@ -1,7 +1,6 @@
 const Query = require('./auth.query')
-const passwordHash = require('password-hash')
-const createToken = require('./auth.hasher')   
-const emailHelper = require('./../user/user.emailhelper')
+const Hasher = require('./auth.hasher')   
+const EmailHelper = require('./../user/user.emailhelper')
 
 //find a user
 function find(req, res, next){
@@ -23,7 +22,7 @@ function find(req, res, next){
 //for register
 function insertUser(req, res, next){
     //hash the password first
-    req.body.password = passwordHash.generate(req.body.password) 
+    req.body.password = Hasher.generateHash(password) //PasswordHash.generate(req.body.password) 
 
     Query
         .insertUser(req.body) 
@@ -32,7 +31,7 @@ function insertUser(req, res, next){
             console.log('registered user id >> ', user._id)
 
             //send email verification link
-            emailHelper.sendRegistrationLink(user.email, user._id, user.emailToken)
+            EmailHelper.sendRegistrationLink(user.email, user._id, user.emailToken)
 
             res.status(200).json(user)
         })
@@ -49,7 +48,7 @@ function login(req, res, next){
         .then(user => {
             console.log('successfully logged in >> ', user)
 
-            var token = createToken({ 
+            var token = Hasher.createToken({ 
                 name : user.username,
                 role : user.role,
                 _id : user._id
@@ -167,8 +166,8 @@ function forgotPassword(req, res, next){
             }
 
             //proceed to update emailToken and userConfirmed
-            user.emailToken = emailHelper.getEmailRegistrationToken()
-            user.emailTokenExpiryDate = emailHelper.getEmailTokenExpiryDate()
+            user.emailToken = EmailHelper.getEmailRegistrationToken()
+            user.emailTokenExpiryDate = EmailHelper.getEmailTokenExpiryDate()
             user.emailConfirmed = false
 
             console.log('email token >> ', user.emailToken)
@@ -187,7 +186,7 @@ function forgotPassword(req, res, next){
                     console.log('email confirmed updated >> ', updated.emailConfirmed)
 
                     //send email confirmation link
-                    emailHelper.sendRegistrationLink(updated.email, id, updated.emailToken)
+                    EmailHelper.sendRegistrationLink(updated.email, id, updated.emailToken)
                     res.status(200).json(updated) 
                 })
                 .catch(err => {
@@ -257,7 +256,7 @@ function resetPassword(req, res, next){
             user.emailToken = ' '
             user.emailTokenExpiryDate = new Date(1970, 1, 1, 2, 2, 2, 2) //set the date way back
             user.emailConfirmed = true  
-            user.password = passwordHash.generate(user.password)
+            user.password = Hasher.generateHash(user.password) //PasswordHash.generate(user.password)
             console.log('hashed password >> ', user.password)
             console.log('user.emailTokenExpiryDate >> ', user.emailTokenExpiryDate)
 
@@ -267,7 +266,7 @@ function resetPassword(req, res, next){
                     console.log('password changed successfully >> ', updated) 
 
                     //send the password reset update via email
-                    emailHelper.sendMailAfterPasswordReset(user.username, user.email)
+                    EmailHelper.sendMailAfterPasswordReset(user.username, user.email)
                     res.status(200).json(updated) 
                 })
                 .catch(err => {
