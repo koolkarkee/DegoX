@@ -1,8 +1,8 @@
 module.exports = function(obj, fromBody){
     if(fromBody.name)
-       obj.name = fromBody.name
+       obj.name = fromBody.name 
     if(fromBody.username)
-       obj.username = fromBody.username
+       obj.username = fromBody.username 
     if(fromBody.password)
        obj.password = fromBody.password
     if(fromBody.email)

@@ -9,8 +9,8 @@ function login(data){
     return Query.login(data) 
 }
 
-function find(condition){ 
-    return Query.find(condition)
+function find(condition, options){ 
+    return Query.find(condition, options)
 }
 
 function verifyUser(emailToken){

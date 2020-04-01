@@ -65,8 +65,11 @@ function remove(req, res, next){
 
 function search(req, res, next){
     var condition = {  } //search params here
+
+    //TODO: build search query 
+
     Query
-        .find(condition)
+        .search(condition, req.query)
         .then(data => {
             res.status(200).json(data)
         }) 

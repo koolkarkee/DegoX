@@ -2,6 +2,7 @@ const Model = require('./user.model')
 const Mapper = require('./user.mapper')
 const Hasher = require('./../auth/auth.hasher')
 const EmailHelper = require('./user.emailhelper')
+const Pagination = require('./../../helpers/pagination.helper') 
 
 function map(data){ 
     var result = new Model({})
@@ -27,8 +28,15 @@ function insert(data){
     return myUser.save()
 }
 
-function find(condition){
-    return Model.find(condition).sort({_id : -1}).exec()
+function find(condition, options = {}){
+    let pagination = Pagination(options) 
+ 
+    return Model
+        .find(condition)
+        .limit(pagination[0]) 
+        .skip(pagination[1])  
+        .sort({_id : -1}) 
+        .exec() 
 }
 
 function update(id, data){
@@ -99,8 +107,9 @@ function login(data){
     }) 
 }
 
-function search(condition){
-    return Model.find(condition).exec() 
+function search(condition, options = {}){
+    console.log('search condition >> ', condition)
+    return find(condition,options) 
 }
 
 module.exports = { 
@@ -108,5 +117,6 @@ module.exports = {
     find,
     update,
     remove,
-    login
+    login,
+    search 
 }

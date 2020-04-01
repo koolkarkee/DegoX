@@ -8,7 +8,7 @@ function find(req, res, next){
     
     console.log('from auth controller >> ')
     Query
-        .find(condition) 
+        .find(condition, req.query) 
         .then(data => {
             console.log('success from auth find >> ', data)
             res.status(200).json(data)
@@ -22,7 +22,7 @@ function find(req, res, next){
 //for register
 function insertUser(req, res, next){
     //hash the password first
-    req.body.password = Hasher.generateHash(password) //PasswordHash.generate(req.body.password) 
+    req.body.password = Hasher.generateHash(req.body.password) //PasswordHash.generate(req.body.password) 
 
     Query
         .insertUser(req.body) 
