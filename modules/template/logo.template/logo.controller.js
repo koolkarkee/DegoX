@@ -1,8 +1,20 @@
-const Query = require('./logo.query')
+const Query = require('./logo.query') 
+const FileHelper = require('./../../../helpers/file.helper')
 
 function insert(req, res, next){
-    //TODO: file upload
-    console.log('request body >> ', req.body)
+    //file upload 
+    if(req.fileErr){
+        return next({
+            msg : "invalid file format!",
+            status : 400
+        }) 
+    }
+
+    if(req.file){ 
+        req.body.name = req.file.filename
+        req.body.svgFile = req.file.destination + req.file.filename
+    }
+
     Query
         .insert(req.body)
         .then(data => {            
@@ -59,7 +71,16 @@ function remove(req, res, next){
     Query
         .remove(req.params.id)
         .then(data => {
-            res.status(200).json(data)
+            //remove file
+            FileHelper
+                .remove(data.svgFile, process.cwd())
+                .then(removed => {
+                    console.log('file removed >> ', removed)
+                    res.status(200).json(data)
+                })
+                .catch(err => { 
+                    next(err)
+                })
         }) 
         .catch(err => {
             console.log('error while removing >> ', err)

@@ -1,8 +1,11 @@
 const Router = require('express').Router()
 const Controller = require('./logo.controller')
+const LogoUploader = require('./../../../middlewares/Uploader') 
+
+const fieldNameForLogo = 'file' 
 
 Router.route('/insert')
-    .post(Controller.insert)
+    .post(LogoUploader.uploadLogo.single(fieldNameForLogo), Controller.insert) 
 
 Router.route('/getAll')
     .get(Controller.find)

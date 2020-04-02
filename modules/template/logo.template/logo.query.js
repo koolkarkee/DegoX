@@ -58,7 +58,7 @@ function remove(id) {
             if(result == null)
                 reject({ msg : "Invalid data for Logo" })
             else { 
-                resolve({ msg : 'successfully removed'})
+                resolve(result)
             }
         })
     })
