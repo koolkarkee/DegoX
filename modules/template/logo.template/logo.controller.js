@@ -1,6 +1,8 @@
 const Query = require('./logo.query') 
 const FileHelper = require('./../../../helpers/file.helper')
 
+const DataFileOperation = require('./logo.datafileoperation')
+
 function insert(req, res, next){
     //file upload 
     if(req.fileErr){
@@ -11,7 +13,7 @@ function insert(req, res, next){
     }
 
     if(req.file){ 
-        req.body.name = req.file.filename
+        req.body.name = req.body.name ? req.body.name : req.file.filename
         req.body.svgFile = req.file.destination + req.file.filename
     }
 
@@ -50,22 +52,22 @@ function findById(req, res, next){
             console.log('error while finding user >> ', err)
             return next(err)
         }) 
-}
+}  
 
 function update(req, res, next){
     console.log('request body in update >> ', req.body)
     console.log('request params id >> ', req.params.id)
+
+    //file upload 
+    if(req.fileErr){
+        return next({
+            msg : "invalid file format!",
+            status : 400
+        }) 
+    }
     
-    Query
-        .update(req.params.id, req.body)
-        .then(data => {
-            res.status(200).json(data)
-        }) 
-        .catch(err => {
-            console.log('error while updating >> ', err)
-            return next(err)
-        }) 
-}
+    DataFileOperation.findAndUpdate(req, res, next)
+} 
 
 function remove(req, res, next){ 
     Query

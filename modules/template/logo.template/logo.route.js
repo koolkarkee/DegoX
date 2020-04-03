@@ -1,8 +1,8 @@
 const Router = require('express').Router()
 const Controller = require('./logo.controller')
-const LogoUploader = require('./../../../middlewares/Uploader') 
+const LogoUploader = require('../../../middlewares/uploader') 
 
-const fieldNameForLogo = 'file' 
+const fieldNameForLogo = 'svgFile' 
 
 Router.route('/insert')
     .post(LogoUploader.uploadLogo.single(fieldNameForLogo), Controller.insert) 
@@ -16,7 +16,7 @@ Router.route('/search')
 //put this part at last
 Router.route('/:id')
     .get(Controller.findById)
-    .put(Controller.update)
+    .put(LogoUploader.uploadLogo.single(fieldNameForLogo),Controller.update)  
     .delete(Controller.remove) 
     
 module.exports = Router 
