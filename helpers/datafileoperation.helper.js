@@ -1,9 +1,6 @@
-const Query = require('./logo.query') 
-const FileHelper = require('../../../helpers/file.helper')
+const FileHelper = require('./file.helper')
 
-//params : req, res, next, Query, err, path, oldValues, fieldsToUpdate, 
-
-function _updateData(req, res, next) {
+function _updateData(req, res, next, Query) {
     console.log('req body ready to update >> ', req.body)
     Query
         .update(req.params.id, req.body)
@@ -29,17 +26,15 @@ function _removeDuplicateFile(next, err, path) {
         })
 }
 
-function _skipFileRemovalAndUpdate(req, res, next) {
+function _skipFileRemovalAndUpdate(req, res, next, Query, fileProperty) {
     //skip file operation  
-    console.log('from skipping >> ', req.oldValues);
-        
-    req.body.name = req.body.name ? req.body.name : req.oldValues.name
-    req.body.svgFile = req.oldValues.svgFile 
+    console.log('from skipping >> ', req.oldValues);        
+    req.body[fileProperty] = req.oldValues[fileProperty] 
 
-    _updateData(req, res, next) 
+    _updateData(req, res, next, Query) 
 }
 
-function _dontSkipFileRemovalAndUpdate(req, res, next) {
+function _dontSkipFileRemovalAndUpdate(req, res, next, Query) {
     console.log('from not skipping >> ', req.oldValues)
     //remove old file
     FileHelper
@@ -47,11 +42,8 @@ function _dontSkipFileRemovalAndUpdate(req, res, next) {
         .then(removed => {
             console.log('old file removed >> ', removed)
 
-            //update new values relating to file
-            req.body.name = req.body.name ? req.body.name : req.file.filename
-            req.body.svgFile = req.file.destination + req.file.filename 
-            
-            _updateData(req, res, next) 
+            //update 
+            _updateData(req, res, next, Query) 
         })
         .catch(err => {
             //remove that same file in case of err
@@ -59,17 +51,17 @@ function _dontSkipFileRemovalAndUpdate(req, res, next) {
         }) 
 }
 
-function _startFileOperation(req, res, next) {
+function _startFileOperation(req, res, next, Query, fileProperty) {
     if(req.file){ 
-        _dontSkipFileRemovalAndUpdate(req, res, next)       
+        _dontSkipFileRemovalAndUpdate(req, res, next, Query)       
     } else { 
-        _skipFileRemovalAndUpdate(req, res, next)
+        _skipFileRemovalAndUpdate(req, res, next, Query, fileProperty) 
     } 
 }
 
-function findAndUpdate(req, res, next) { 
+function findAndUpdate(req, res, next, Query, fileProperty) { 
     var oldValues = {};
-    Query
+    Query 
         .find({ _id : req.params.id })  
         .then(data => {
             oldValues = data[0] 
@@ -82,7 +74,7 @@ function findAndUpdate(req, res, next) {
                 }) 
             }else{ //start file operation for update
                 req.oldValues = oldValues
-                _startFileOperation(req, res, next)
+                _startFileOperation(req, res, next, Query, fileProperty)
             } 
         })
         .catch(err => {
@@ -90,6 +82,30 @@ function findAndUpdate(req, res, next) {
         })  
 }
 
+function removeAndUpdate(req, res, next, Query, fileProperty) {
+    Query
+        .remove(req.params.id)
+        .then(data => {
+            console.log('from remove and update file -- value of data[fileProperty] >> ', data[fileProperty]);
+            
+            //remove file
+            FileHelper
+                .remove(data[fileProperty], process.cwd())
+                .then(removed => {
+                    console.log('file removed >> ', removed)
+                    res.status(200).json(data)
+                })
+                .catch(err => { 
+                    next(err)
+                })
+        }) 
+        .catch(err => {
+            console.log('error while removing >> ', err)
+            return next(err)
+        }) 
+}
+
 module.exports = {
-    findAndUpdate
+    findAndUpdate,
+    removeAndUpdate
 }

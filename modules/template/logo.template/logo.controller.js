@@ -1,7 +1,5 @@
 const Query = require('./logo.query') 
-const FileHelper = require('./../../../helpers/file.helper')
-
-const DataFileOperation = require('./logo.datafileoperation')
+const DataFileOperationHelper = require('./../../../helpers/datafileoperation.helper')
 
 function insert(req, res, next){
     //file upload 
@@ -66,28 +64,23 @@ function update(req, res, next){
         }) 
     }
     
-    DataFileOperation.findAndUpdate(req, res, next)
+    if(req.file){   
+        //set values for req body
+        req.body.name = req.body.name ? req.body.name : req.file.filename
+        req.body.svgFile = req.file.destination + req.file.filename
+    } else {
+        req.body.name = req.body.name ? req.body.name : (Date.now() + '')
+    }
+    
+    var fileProperty = 'svgFile'
+    DataFileOperationHelper.findAndUpdate(req, res, next, Query, fileProperty)
 } 
 
 function remove(req, res, next){ 
-    Query
-        .remove(req.params.id)
-        .then(data => {
-            //remove file
-            FileHelper
-                .remove(data.svgFile, process.cwd())
-                .then(removed => {
-                    console.log('file removed >> ', removed)
-                    res.status(200).json(data)
-                })
-                .catch(err => { 
-                    next(err)
-                })
-        }) 
-        .catch(err => {
-            console.log('error while removing >> ', err)
-            return next(err)
-        }) 
+    //target property from model that links to file
+    var fileProperty = 'svgFile'
+
+    DataFileOperationHelper.removeAndUpdate(req, res, next, Query, fileProperty)
 }
 
 function search(req, res, next){
@@ -137,3 +130,4 @@ module.exports = {
     remove,
     search
 }
+
