@@ -3,7 +3,7 @@ const Config = require('./../configs')
 
 const UserModel = require('./../modules/user/user.model')      
 
-module.exports = function(req, res, next){
+module.exports = function(req, res, next){  
     let token;
     if(req.headers['x-access-token']){
         token = req.headers['x-access-token']
@@ -18,6 +18,7 @@ module.exports = function(req, res, next){
         token = req.query.token
     }
 
+    console.log('jwt token >> ', token);
     if(!token){
         next({
             msg : 'token not provided',
@@ -26,7 +27,10 @@ module.exports = function(req, res, next){
     }
 
     //verify the token
+    token = token.split(' ')[1]
     JWT.verify(token, Config.JWT_secret, (err, decoded) => {
+        console.log('jwt token >> ', token);
+        
         if(err){
             return next(err)
         }

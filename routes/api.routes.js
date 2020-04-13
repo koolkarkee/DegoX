@@ -12,8 +12,7 @@ const LogoRoute = require('./../modules/template/logo.template/logo.route')
 
 Router.use('/auth', AuthRoute)
 Router.use('/user', Authenticate, UserRoute) 
-Router.use('/template/industryCategory', IndustryCategoryRoute)
-Router.use('/template/logo', LogoRoute)
-
+Router.use('/template/industryCategory', Authenticate, Authorize, IndustryCategoryRoute)
+Router.use('/template/logo', Authenticate, Authorize, LogoRoute) 
 
 module.exports = Router 
