@@ -15,11 +15,22 @@ function insert(req, res, next){
 
 function find(req, res, next){
     var condition = {}
+    var rows 
+
     Query
         .find(condition, req.query)
-        .then(data => {
-            res.status(200).json(data)
-        }) 
+        .then(data => {   
+            rows = data 
+            return Query.findTotalRowsCount() 
+        })  
+        .then(count => {  
+            var result = {
+                totalRowsCount : count,
+                rows
+            }
+
+            res.status(200).json(result)
+        })
         .catch(err => {
             console.log('error while finding data >> ', err)
             return next(err)
@@ -75,10 +86,10 @@ function search(req, res, next){
             $options : "i"
         }
     }  
-
+ 
     Query
         .search(condition, req.query)
-        .then(data => {
+        .then(data => { 
             res.status(200).json(data)
         }) 
         .catch(err => {

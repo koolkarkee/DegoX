@@ -24,13 +24,20 @@ function insert(data) {
 
 function find(condition, options = {}){ 
     let pagination = Pagination(options) 
- 
-    return Model
-        .find(condition)
-        .limit(pagination[0]) 
-        .skip(pagination[1])  
-        .sort({_id : -1}) 
-        .exec()
+
+    return  Model
+                .find(condition)
+                .limit(pagination[0]) 
+                .skip(pagination[1])  
+                .sort({_id : -1})  
+                .exec() 
+}
+
+function findTotalRowsCount(condition){   
+    return   Model
+                .find(condition)
+                .countDocuments() 
+                .exec()
 }
 
 function update(id, data){
@@ -74,5 +81,6 @@ module.exports = {
     find,
     update,
     remove,
-    search
+    search,
+    findTotalRowsCount
 }
