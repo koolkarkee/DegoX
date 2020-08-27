@@ -89,8 +89,17 @@ function search(req, res, next){
  
     Query
         .search(condition, req.query)
-        .then(data => { 
-            res.status(200).json(data)
+        .then(data => {   
+            rows = data 
+            return Query.findTotalRowsCount(condition) 
+        }) 
+        .then(count => {  
+            var result = {
+                totalRowsCount : count,
+                rows
+            }
+
+            res.status(200).json(result)
         }) 
         .catch(err => {
             console.log('error while searching >> ', err)
