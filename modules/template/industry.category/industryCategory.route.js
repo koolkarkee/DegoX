@@ -9,6 +9,7 @@ Router.route('/getAll')
 
 Router.route('/search') 
     .get(Controller.search) 
+    .post(Controller.search)
 
 //put this part at last
 Router.route('/:id')

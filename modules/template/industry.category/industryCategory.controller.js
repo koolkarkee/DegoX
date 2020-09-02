@@ -79,14 +79,35 @@ function remove(req, res, next){
 
 function search(req, res, next){
     console.log('search query >> ', req.query)
-    
-    var condition = { 
-        name : {
+
+    var conditionName = {
             $regex : req.query.name,
             $options : "i"
+    } 
+
+    var condition = {
+        $and : [{name : conditionName}]  
+    }
+    console.log('condition name >> ', conditionName) 
+
+    console.log('req body >> ', req.body) 
+
+    var conditionCreatedAt
+    if(req.body.startDate && req.body.endDate){
+        const startDate = new Date(new Date(req.body.startDate).setHours(0,0,0,0))
+        const endDate = new Date(new Date(req.body.endDate).setHours(23, 59, 59, 9999)) 
+        
+        conditionCreatedAt = {
+            $gte : startDate,
+            $lt : endDate
+        }    
+
+        console.log('condition createdAt >> ', conditionCreatedAt)
+        condition = {
+            $and : [{name : conditionName}, {createdAt : conditionCreatedAt}]  
         }
     }  
- 
+    
     Query
         .search(condition, req.query)
         .then(data => {   
